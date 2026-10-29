@@ -1,0 +1,7 @@
+# Exclude local Terraform data and deployment-specific inputs from module packages.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example

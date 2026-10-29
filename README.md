@@ -389,6 +389,21 @@ The intended delivery flow is:
 
 The initial repository should start with local checks and a sandbox-only capability. Add production deployment automation only after the state backend, account boundaries, role policies, approval gates, and recovery procedures have been reviewed.
 
+## Network foundation module
+
+The reusable network module is at `infra/modules/network`; the initial composition is
+`infra/live/sandbox/network`. It creates an IPv4-only VPC, public/private application/private data
+subnets, explicit route tables, optional declared NAT and VPC endpoints, default-deny tier security
+groups, and all-traffic Flow Logs. See the [module contract](specs/001-network-foundation/contracts/network-module.md),
+[module guide](infra/modules/network/README.md), and [validation quickstart](specs/001-network-foundation/quickstart.md).
+
+All account, Region, IPAM allocation, backend, log destination, ownership, endpoint, and workload
+flow values remain explicit inputs. Do not copy synthetic test CIDRs into a live environment.
+Development, staging, and production must use separate roots, state keys, scoped roles, and reviewed
+plans when those compositions are added. Run format, backend-free validation, tests, lint, and
+security scans before review; do not apply from an untrusted pull request. No AWS resources are
+created by the repository until an authorized plan and separate environment approval are complete.
+
 ## 11. Suggested learning and implementation roadmap
 
 Build in dependency order. Every phase should produce a specification, a Terraform implementation, verification evidence, and brief documentation.

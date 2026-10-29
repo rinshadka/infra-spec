@@ -1,0 +1,33 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id              = "<12-digit-approved-account-id>"
+# aws_region                  = "<approved-region>"
+# environment                 = "sandbox"
+# owner                       = "<approved-owner>"
+# cost_center                 = "<approved-cost-center>"
+# ipam_approval_reference     = "<approved-ipam-allocation-or-ticket>"
+# vpc_cidr_block              = "<ipam-approved-vpc-cidr>"
+# availability_zone_ids       = ["<approved-az-id-1>", "<approved-az-id-2>"]
+# subnet_cidrs_by_az = {
+#   "<approved-az-id-1>" = {
+#     public      = "<ipam-approved-public-cidr>"
+#     application = "<ipam-approved-application-cidr>"
+#     data        = "<ipam-approved-data-cidr>"
+#   }
+#   "<approved-az-id-2>" = {
+#     public      = "<ipam-approved-public-cidr>"
+#     application = "<ipam-approved-application-cidr>"
+#     data        = "<ipam-approved-data-cidr>"
+#   }
+# }
+# nat_mode                  = "<disabled|shared|per_az>"
+# endpoint_configs          = {}
+# allowed_flows             = []
+# public_lb_ingress          = []
+# allowed_egress             = []
+# flow_log_destination_arn  = "<approved-central-s3-flow-log-arn>"
+# flow_log_operations_owner = "<approved-operations-team>"
+# nat_alarm_topic_arn       = "<operations-sns-topic-arn-required-when-nat-enabled>"
+# additional_tags            = {}

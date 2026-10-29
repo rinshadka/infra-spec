@@ -1,0 +1,3 @@
+# Replace with the organization's approved Platform Network/Security team before enabling plans.
+# Required mapping: /infra/modules/network/ @<approved-platform-network-security-team>
+# Required mapping: /infra/live/sandbox/network/ @<approved-platform-network-security-team>

@@ -1,0 +1,143 @@
+name: Terraform network foundation
+
+on:
+  pull_request:
+    paths:
+      - "infra/**"
+      - "specs/001-network-foundation/**"
+      - ".tflint.hcl"
+      - ".checkov.yaml"
+      - ".github/workflows/terraform-network.yml"
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Apply the exact saved plan after protected environment approval
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: 1.12.0
+          terraform_wrapper: false
+      - name: Format check
+        run: terraform fmt -check -recursive
+      - name: Initialize without remote state
+        run: |
+          terraform -chdir=infra/modules/network init -backend=false -input=false
+          terraform -chdir=infra/live/sandbox/network init -backend=false -input=false
+      - name: Validate
+        run: |
+          terraform -chdir=infra/modules/network validate
+          terraform -chdir=infra/live/sandbox/network validate
+      - name: Module tests
+        run: terraform -chdir=infra/modules/network test
+      - name: TFLint
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/tflint_linux_amd64.zip" https://github.com/terraform-linters/tflint/releases/download/v0.64.0/tflint_linux_amd64.zip
+          curl -sSfL -o "$RUNNER_TEMP/tflint_checksums.txt" https://github.com/terraform-linters/tflint/releases/download/v0.64.0/checksums.txt
+          (cd "$RUNNER_TEMP" && grep 'tflint_linux_amd64.zip$' tflint_checksums.txt | sha256sum --check)
+          unzip -q "$RUNNER_TEMP/tflint_linux_amd64.zip" -d "$RUNNER_TEMP/tflint"
+          echo "$RUNNER_TEMP/tflint" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/tflint:$PATH"
+          tflint --init
+          tflint --recursive
+      - name: Checkov
+        run: |
+          python3 -m venv "$RUNNER_TEMP/checkov"
+          "$RUNNER_TEMP/checkov/bin/python" -m pip install checkov==3.4.0
+          "$RUNNER_TEMP/checkov/bin/checkov" -d infra/modules/network --framework terraform
+          "$RUNNER_TEMP/checkov/bin/checkov" -d infra/live/sandbox/network --framework terraform
+
+  plan:
+    if: github.event_name == 'workflow_dispatch' && github.ref_name == github.event.repository.default_branch && vars.NETWORK_PLAN_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: sandbox-plan
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Require organization CODEOWNERS mapping before protected plans
+        run: |
+          grep -Eq '^/infra/modules/network/[[:space:]]+@[^<[:space:]]+' .github/CODEOWNERS
+          grep -Eq '^/infra/live/sandbox/network/[[:space:]]+@[^<[:space:]]+' .github/CODEOWNERS
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: 1.12.0
+          terraform_wrapper: false
+      - name: Configure short-lived read-only AWS role
+        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        with:
+          role-to-assume: ${{ vars.NETWORK_PLAN_ROLE_ARN }}
+          aws-region: ${{ vars.NETWORK_AWS_REGION }}
+          role-session-name: network-plan-${{ github.run_id }}
+      - name: Prepare protected backend and environment inputs
+        env:
+          BACKEND_CONFIG_HCL: ${{ secrets.NETWORK_BACKEND_CONFIG_HCL }}
+          NETWORK_TFVARS_HCL: ${{ secrets.NETWORK_TFVARS_HCL }}
+        run: |
+          test -n "$BACKEND_CONFIG_HCL"
+          test -n "$NETWORK_TFVARS_HCL"
+          printf '%s\n' "$BACKEND_CONFIG_HCL" > "$RUNNER_TEMP/network-backend.hcl"
+          printf '%s\n' "$NETWORK_TFVARS_HCL" > "$RUNNER_TEMP/network.tfvars"
+      - name: Initialize and create reviewed plan
+        run: |
+          terraform -chdir=infra/live/sandbox/network init -input=false -lockfile=readonly -backend-config="$RUNNER_TEMP/network-backend.hcl"
+          terraform -chdir=infra/live/sandbox/network plan -input=false -lock-timeout=5m -var-file="$RUNNER_TEMP/network.tfvars" -out="$RUNNER_TEMP/network.tfplan"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: network-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/network.tfplan
+          retention-days: 1
+          if-no-files-found: error
+
+  apply:
+    if: github.event_name == 'workflow_dispatch' && inputs.apply && github.ref_name == github.event.repository.default_branch && vars.NETWORK_PLAN_ENABLED == 'true'
+    needs: plan
+    runs-on: ubuntu-latest
+    environment: sandbox-apply
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: 1.12.0
+          terraform_wrapper: false
+      - uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        with:
+          role-to-assume: ${{ vars.NETWORK_APPLY_ROLE_ARN }}
+          aws-region: ${{ vars.NETWORK_AWS_REGION }}
+          role-session-name: network-apply-${{ github.run_id }}
+      - name: Prepare protected backend and environment inputs
+        env:
+          BACKEND_CONFIG_HCL: ${{ secrets.NETWORK_BACKEND_CONFIG_HCL }}
+          NETWORK_TFVARS_HCL: ${{ secrets.NETWORK_TFVARS_HCL }}
+        run: |
+          test -n "$BACKEND_CONFIG_HCL"
+          test -n "$NETWORK_TFVARS_HCL"
+          printf '%s\n' "$BACKEND_CONFIG_HCL" > "$RUNNER_TEMP/network-backend.hcl"
+          printf '%s\n' "$NETWORK_TFVARS_HCL" > "$RUNNER_TEMP/network.tfvars"
+      - name: Initialize state backend
+        run: terraform -chdir=infra/live/sandbox/network init -input=false -lockfile=readonly -backend-config="$RUNNER_TEMP/network-backend.hcl"
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v4.1.8
+        with:
+          name: network-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}
+      - name: Apply the exact saved plan
+        run: terraform -chdir=infra/live/sandbox/network apply -input=false -lock-timeout=5m "$RUNNER_TEMP/network.tfplan"
