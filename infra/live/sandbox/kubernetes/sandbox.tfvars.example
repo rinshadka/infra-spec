@@ -1,0 +1,20 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# kubernetes_version     = "<approved EKS minor version, e.g. 1.33>"
+# application_subnet_ids = ["<network output private_application_subnet_ids>"]
+# compute_kms_key_arn    = "<security-baseline data_kms_key_arns.compute>"
+# log_kms_key_arn        = "<security-baseline logs_kms_key_arn>"
+# access_entries = {
+#   platform-admins = { principal_arn = "<approved admin role ARN>", policy_name = "AmazonEKSClusterAdminPolicy" }
+# }
+# node_groups = {
+#   general = { instance_types = ["<approved type>"], capacity_type = "SPOT", min_size = 1, max_size = 3, desired_size = 2 }
+# }

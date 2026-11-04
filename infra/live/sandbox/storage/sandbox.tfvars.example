@@ -1,0 +1,21 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# kms_key_arn            = "<security-baseline data_kms_key_arns.storage>"
+# access_log_bucket_name = "<approved-access-log-bucket-or-null>"
+# buckets = {
+#   static-site = { bucket_name = "<globally-unique-name>", data_classification = "internal" }
+#   transfer    = { bucket_name = "<globally-unique-name>", data_classification = "confidential" }
+# }
+# vpc_id          = "<network output vpc_id>"
+# data_subnet_ids = ["<network output private_data_subnet_ids>"]
+# file_systems = {
+#   shared = { client_security_group_ids = ["<network output application_security_group_id>"] }
+# }

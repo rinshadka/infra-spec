@@ -1,0 +1,22 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# domain_name               = "<3-28 char name>"
+# engine_version            = "<approved, e.g. OpenSearch_2.19>"
+# instance_type             = "<approved type, e.g. t3.small.search for sandbox>"
+# instance_count            = 2
+# vpc_id                    = "<network output vpc_id>"
+# data_subnet_ids           = ["<two network private_data subnet IDs>"]
+# client_security_group_ids = ["<network output application_security_group_id>"]
+# search_kms_key_arn        = "<security-baseline data_kms_key_arns.search>"
+# log_kms_key_arn           = "<security-baseline logs_kms_key_arn>"
+# master_user_role_arn      = "<approved search admin role ARN>"
+# access_principal_arns     = ["<approved client role ARNs>"]
+# alarm_topic_arn           = "<security-baseline operations_topic_arn>"

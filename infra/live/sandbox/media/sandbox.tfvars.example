@@ -1,0 +1,16 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# pipeline_name        = "<purpose slug>"
+# input_bucket_name    = "<globally-unique-name>"
+# output_bucket_name   = "<globally-unique-name>"
+# media_kms_key_arn    = "<security-baseline data key; allow mediaconvert/sqs/events use>"
+# submitter_lambda_arn = null # set after the workload submitter function exists
+# alarm_topic_arn      = "<security-baseline operations_topic_arn>"

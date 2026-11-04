@@ -1,0 +1,22 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# database_name             = "<purpose slug>"
+# engine                    = "<postgres|mysql|aurora-postgresql|aurora-mysql>"
+# engine_version            = "<approved version>"
+# parameter_group_family    = "<matching family, e.g. postgres17>"
+# instance_class            = "<approved class>"
+# multi_az                  = false
+# backup_retention_days     = 7
+# vpc_id                    = "<network output vpc_id>"
+# data_subnet_ids           = ["<network output private_data_subnet_ids>"]
+# client_security_group_ids = ["<network output application_security_group_id>"]
+# database_kms_key_arn      = "<security-baseline data_kms_key_arns.database>"
+# alarm_topic_arn           = "<security-baseline operations_topic_arn>"

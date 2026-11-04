@@ -1,0 +1,20 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# service_name                  = "<service slug>"
+# image_tag_or_digest           = "<immutable tag, or @sha256:... digest>"
+# application_subnet_ids        = ["<network output private_application_subnet_ids>"]
+# application_security_group_id = "<network output application_security_group_id>"
+# target_group_arn              = "<edge output target_group_arns.app or null>"
+# compute_kms_key_arn           = "<security-baseline data_kms_key_arns.compute>"
+# log_kms_key_arn               = "<security-baseline logs_kms_key_arn>"
+# alarm_topic_arn               = "<security-baseline operations_topic_arn>"
+# autoscaling                   = { min_capacity = 1, max_capacity = 2 }
+# use_fargate_spot              = true

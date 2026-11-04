@@ -1,0 +1,22 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# workload_name                      = "<2-20 char workload slug>"
+# vpc_id                             = "<network output vpc_id>"
+# load_balancer_subnet_ids           = ["<network public or private_application subnet IDs>"]
+# load_balancer_security_group_id    = "<network output load_balancer_security_group_id>"
+# internal                           = <true|false>
+# public_exposure_approval_reference = "<required when internal = false>"
+# access_logs_bucket                 = "<approved ELB access-log bucket>"
+# hosted_zone_id                     = "<documented Route 53 zone ID>"
+# domain_name                        = "<workload DNS name>"
+# log_kms_key_arn                    = "<security-baseline logs_kms_key_arn>"
+# enable_waf                         = false
+# cdn                                = null

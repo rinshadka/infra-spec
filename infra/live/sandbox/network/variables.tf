@@ -95,12 +95,12 @@ variable "nat_mode" {
 variable "endpoint_configs" {
   description = "Workload-declared VPC endpoints; empty unless a workload requires a service."
   type = map(object({
-    service_name       = string
-    type               = string
-    subnet_tiers       = set(string)
-    route_table_tiers  = set(string)
-    workload_tiers     = set(string)
-    policy_json        = string
+    service_name      = string
+    type              = string
+    subnet_tiers      = set(string)
+    route_table_tiers = set(string)
+    workload_tiers    = set(string)
+    policy_json       = string
   }))
   default = {}
 }
@@ -137,14 +137,14 @@ variable "public_lb_ingress" {
 variable "allowed_egress" {
   description = "Explicit destination-restricted workload internet egress rules."
   type = list(object({
-    name                   = string
-    source_tier            = string
+    name                    = string
+    source_tier             = string
     destination_cidr_blocks = set(string)
-    prefix_list_ids        = set(string)
-    protocol               = string
-    from_port              = number
-    to_port                = number
-    description            = string
+    prefix_list_ids         = set(string)
+    protocol                = string
+    from_port               = number
+    to_port                 = number
+    description             = string
   }))
   default = []
 }

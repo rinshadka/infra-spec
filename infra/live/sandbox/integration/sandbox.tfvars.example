@@ -1,0 +1,22 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# integration_name   = "<purpose slug>"
+# event_sources      = ["<app.source>"]
+# event_detail_types = ["<Detail Type>"]
+# consumer = {
+#   runtime   = "<approved runtime, e.g. python3.13>"
+#   handler   = "<module.handler>"
+#   s3_bucket = "<artifact bucket>"
+#   s3_key    = "<artifact key>"
+# }
+# messaging_kms_key_arn = "<security-baseline data_kms_key_arns.messaging>"
+# log_kms_key_arn       = "<security-baseline logs_kms_key_arn>"
+# alarm_topic_arn       = "<security-baseline operations_topic_arn>"

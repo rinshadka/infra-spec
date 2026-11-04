@@ -1,0 +1,19 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# instance_name       = "<purpose slug>"
+# ami_id              = "<approved pinned AMI ID>"
+# instance_type       = "<approved instance type>"
+# vpc_id              = "<network output vpc_id>"
+# subnet_id           = "<one network private_application subnet ID>"
+# compute_kms_key_arn = "<security-baseline data_kms_key_arns.compute>"
+# alarm_topic_arn     = "<security-baseline operations_topic_arn>"
+# ingress_rules       = []
+# egress_rules        = [] # SSM needs ssm, ssmmessages, ec2messages endpoints (network endpoint_configs) or approved egress

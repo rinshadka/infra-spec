@@ -1,0 +1,25 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# server_name                        = "<purpose slug>"
+# internet_facing                    = <true|false>
+# public_exposure_approval_reference = "<required when internet_facing = true>"
+# vpc_id                             = "<network output vpc_id>"
+# subnet_ids                         = ["<network public or private_application subnet IDs>"]
+# allowed_source_cidrs               = ["<exact partner CIDR>"]
+# log_kms_key_arn                    = "<security-baseline logs_kms_key_arn>"
+# users = {
+#   "<partner-username>" = {
+#     bucket_name     = "<storage output bucket_names.transfer>"
+#     home_prefix     = "partners/<partner>"
+#     kms_key_arn     = "<security-baseline data_kms_key_arns.storage>"
+#     ssh_public_keys = ["<partner-supplied public key; never a private key>"]
+#   }
+# }

@@ -1,0 +1,23 @@
+# Non-deployable template. Replace every placeholder with values approved for the target
+# environment and provide backend configuration through the approved deployment process.
+# Never commit populated deployment-specific variable files.
+
+# aws_account_id  = "<12-digit-approved-account-id>"
+# aws_region      = "<approved-region>"
+# environment     = "sandbox"
+# owner           = "<approved-owner>"
+# cost_center     = "<approved-cost-center>"
+# additional_tags = {}
+# operations_owner         = "<approved-operations-team>"
+# enable_cloudtrail        = <true unless an organization trail covers this account>
+# enable_config            = <true unless an organization recorder exists>
+# enable_security_hub      = <true unless delegated-admin automation enables it>
+# audit_log_retention_days = 365
+# data_kms_keys = {
+#   storage    = { description = "S3 and EFS data", service_principals = ["s3.amazonaws.com"] }
+#   database   = { description = "RDS / Aurora", service_principals = ["rds.amazonaws.com"] }
+#   search     = { description = "OpenSearch", service_principals = ["es.amazonaws.com"] }
+#   compute    = { description = "EBS, ECR, EKS secrets" }
+#   messaging  = { description = "SQS and Lambda", service_principals = ["sqs.amazonaws.com", "events.amazonaws.com"] }
+# }
+# secret_containers = {}
